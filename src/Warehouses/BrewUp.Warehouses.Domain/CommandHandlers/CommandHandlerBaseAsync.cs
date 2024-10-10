@@ -12,6 +12,8 @@ public abstract class CommandHandlerBaseAsync<TCommand> : CommandHandlerAsync<TC
 
 	public override async Task HandleAsync(TCommand command, CancellationToken cancellationToken = new())
 	{
+        cancellationToken.ThrowIfCancellationRequested();
+        
 		try
 		{
 			Logger.LogInformation(

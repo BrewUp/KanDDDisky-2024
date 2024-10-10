@@ -8,7 +8,7 @@ public class WarehousesModule : IModule
 	public bool IsEnabled => true;
 	public int Order => 0;
 
-	public IServiceCollection RegisterModule(WebApplicationBuilder builder) => builder.Services.AddWarehouses();
+	public IServiceCollection Register(WebApplicationBuilder builder) => builder.Services.AddWarehouses();
 
-	public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints) => endpoints.MapWarehousesEndpoints();
+	WebApplication IModule.Configure(WebApplication app) => app.MapWarehousesEndpoints();
 }

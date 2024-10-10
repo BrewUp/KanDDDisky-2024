@@ -14,12 +14,14 @@ public sealed class UpdateAvailabilityDueToProductionOrderCommandHandler : Comma
 
 	public override async Task ProcessCommand(UpdateAvailabilityDueToProductionOrder command, CancellationToken cancellationToken = default)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+		
 		try
 		{
-			var aggregate = await Repository.GetByIdAsync<Availability>(command.BeerId.Value);
-			aggregate.UpdateAvailability(command.Quantity, command.MessageId);
+			var aggregate = await Repository.GetByIdAsync<Availability>(command.BeerId);
+			aggregate!.UpdateAvailability(command.Quantity, command.MessageId);
 
-			await Repository.SaveAsync(aggregate, Guid.NewGuid());
+			await Repository.SaveAsync(aggregate, Guid.NewGuid(), cancellationToken);
 		}
 		catch
 		{

@@ -9,9 +9,9 @@ namespace BrewUp.Warehouses.Facade.Endpoints;
 
 public static class WarehousesEndpoints
 {
-	public static IEndpointRouteBuilder MapWarehousesEndpoints(this IEndpointRouteBuilder endpoints)
+	public static WebApplication MapWarehousesEndpoints(this WebApplication app)
 	{
-		var group = endpoints.MapGroup("/v1/wareHouses/")
+		var group = app.MapGroup("/v1/wareHouses/")
 			.WithTags("Warehouses");
 
 		group.MapPost("/availabilities", HandleSetAvailabilities)
@@ -19,7 +19,7 @@ public static class WarehousesEndpoints
 			.Produces(StatusCodes.Status200OK)
 			.WithName("SetAvailabilities");
 
-		return endpoints;
+		return app;
 	}
 
 	public static async Task<IResult> HandleSetAvailabilities(

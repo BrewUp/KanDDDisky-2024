@@ -4,14 +4,14 @@ using Muflone.Persistence;
 
 namespace BrewUp.Sales.Domain.CommandHandlers;
 
-public abstract class CommandHandlerBaseAsync<TCommand> : CommandHandlerAsync<TCommand> where TCommand : class, ICommand
+public abstract class CommandHandlerBaseAsync<TCommand>(IRepository repository, ILoggerFactory loggerFactory)
+	: CommandHandlerAsync<TCommand>(repository, loggerFactory)
+	where TCommand : class, ICommand
 {
-	protected CommandHandlerBaseAsync(IRepository repository, ILoggerFactory loggerFactory) : base(repository, loggerFactory)
-	{
-	}
-
 	public override async Task HandleAsync(TCommand command, CancellationToken cancellationToken = new())
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+		
 		try
 		{
 			Logger.LogInformation(

@@ -9,38 +9,17 @@ namespace BrewUp.Sales.Facade.Endpoints;
 
 public static class SalesEndpoints
 {
-	public static IEndpointRouteBuilder MapSalesEndpoints(this IEndpointRouteBuilder endpoints)
+	public static WebApplication MapSalesEndpoints(this WebApplication app)
 	{
-		var group = endpoints.MapGroup("/v1/sales/")
+		var group = app.MapGroup("/v1/sales/")
 			.WithTags("Sales");
-
-		group.MapPost("/", HandleCreateOrder)
-			.Produces(StatusCodes.Status400BadRequest)
-			.Produces(StatusCodes.Status201Created)
-			.WithName("CreateSalesOrder");
 
 		group.MapGet("/", HandleGetOrders)
 			.Produces(StatusCodes.Status400BadRequest)
 			.Produces(StatusCodes.Status200OK)
 			.WithName("GetSalesOrders");
 
-		return endpoints;
-	}
-
-	public static async Task<IResult> HandleCreateOrder(
-		ISalesFacade salesUpFacade,
-		IValidator<SalesOrderJson> validator,
-		ValidationHandler validationHandler,
-		SalesOrderJson body,
-		CancellationToken cancellationToken)
-	{
-		await validationHandler.ValidateAsync(validator, body);
-		if (!validationHandler.IsValid)
-			return Results.BadRequest(validationHandler.Errors);
-
-		var salesOrderId = await salesUpFacade.CreateOrderAsync(body, cancellationToken);
-
-		return Results.Created(new Uri($"/v1/sales/{salesOrderId}", UriKind.Relative), salesOrderId);
+		return app;
 	}
 
 	public static async Task<IResult> HandleGetOrders(

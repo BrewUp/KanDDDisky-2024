@@ -24,7 +24,7 @@ public static class DomainHelper
 						salesOrder._customerId, salesOrder._customerName, salesOrder._orderDate,
 									salesOrder._rows.Select(r => new SalesOrderRowJson
 									{
-										BeerId = r._beerId.Value,
+										BeerId = new Guid(r._beerId.Value),
 										BeerName = r._beerName.Value,
 										Quantity = r._quantity,
 										Price = r._beerPrice

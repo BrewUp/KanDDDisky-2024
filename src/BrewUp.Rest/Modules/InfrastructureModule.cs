@@ -11,10 +11,13 @@ public class InfrastructureModule : IModule
 	public bool IsEnabled => true;
 	public int Order => 90;
 
-	public IServiceCollection RegisterModule(WebApplicationBuilder builder)
+	public IServiceCollection Register(WebApplicationBuilder builder)
 	{
+		var eventStoreSettings = builder.Configuration.GetSection("BrewUp:EventStore")
+			.Get<EventStoreSettings>()!;
+		
 		builder.Services.AddInfrastructure(builder.Configuration.GetSection("BrewUp:MongoDbSettings").Get<MongoDbSettings>()!,
-			builder.Configuration.GetSection("BrewUp:EventStore").Get<EventStoreSettings>()!);
+			eventStoreSettings);
 
 		var rabbitMqSettings = builder.Configuration.GetSection("BrewUp:RabbitMQ")
 			.Get<RabbitMqSettings>()!;
@@ -25,5 +28,5 @@ public class InfrastructureModule : IModule
 		return builder.Services;
 	}
 
-	public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints) => endpoints;
+	WebApplication IModule.Configure(WebApplication app) => app;
 }

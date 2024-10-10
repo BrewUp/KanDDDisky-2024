@@ -9,7 +9,7 @@ using Muflone.Transport.RabbitMQ.Consumers;
 namespace BrewUp.Sales.Infrastructures.RabbitMq.Events;
 
 public sealed class AvailabilityUpdatedDueToWarehousesNotificationConsumer(IAvailabilityService availabilityService,
-		IMufloneConnectionFactory connectionFactory, ILoggerFactory loggerFactory)
+	IRabbitMQConnectionFactory connectionFactory, ILoggerFactory loggerFactory)
 	: DomainEventsConsumerBase<AvailabilityUpdatedDueToWarehousesNotification>(connectionFactory, loggerFactory)
 {
 	protected override IEnumerable<IDomainEventHandlerAsync<AvailabilityUpdatedDueToWarehousesNotification>> HandlersAsync { get; } = new List<IDomainEventHandlerAsync<AvailabilityUpdatedDueToWarehousesNotification>>

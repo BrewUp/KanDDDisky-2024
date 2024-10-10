@@ -23,8 +23,9 @@ public static class RabbitMqHelper
 		var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
 
 		var rabbitMqConfiguration = new RabbitMQConfiguration(rabbitMqSettings.Host, rabbitMqSettings.Username,
-			rabbitMqSettings.Password, rabbitMqSettings.ExchangeCommandName, rabbitMqSettings.ExchangeEventName);
-		var mufloneConnectionFactory = new MufloneConnectionFactory(rabbitMqConfiguration, loggerFactory);
+			rabbitMqSettings.Password, rabbitMqSettings.ExchangeCommandName, rabbitMqSettings.ExchangeEventName,
+			rabbitMqSettings.ClientId);
+		var connectionFactory = new RabbitMQConnectionFactory(rabbitMqConfiguration, loggerFactory);
 
 		services.AddMufloneTransportRabbitMQ(loggerFactory, rabbitMqConfiguration);
 
@@ -33,11 +34,11 @@ public static class RabbitMqHelper
 		consumers = consumers.Concat(new List<IConsumer>
 		{
 			new UpdateAvailabilityDueToProductionOrderConsumer(repository,
-				mufloneConnectionFactory,
+				connectionFactory,
 				loggerFactory),
 			new AvailabilityUpdatedDueToProductionOrderConsumer(serviceProvider.GetRequiredService<IAvailabilityService>(),
 				serviceProvider.GetRequiredService<IEventBus>(),
-				mufloneConnectionFactory, loggerFactory)
+				connectionFactory, loggerFactory)
 		});
 		services.AddMufloneRabbitMQConsumers(consumers);
 

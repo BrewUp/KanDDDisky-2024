@@ -23,8 +23,9 @@ public static class RabbitMqHelper
 		var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
 
 		var rabbitMqConfiguration = new RabbitMQConfiguration(rabbitMqSettings.Host, rabbitMqSettings.Username,
-			rabbitMqSettings.Password, rabbitMqSettings.ExchangeCommandName, rabbitMqSettings.ExchangeEventName);
-		var mufloneConnectionFactory = new MufloneConnectionFactory(rabbitMqConfiguration, loggerFactory);
+			rabbitMqSettings.Password, rabbitMqSettings.ExchangeCommandName, rabbitMqSettings.ExchangeEventName,
+			rabbitMqSettings.ClientId);
+		var rabbitConnectionFactory = new RabbitMQConnectionFactory(rabbitMqConfiguration, loggerFactory);
 
 		services.AddMufloneTransportRabbitMQ(loggerFactory, rabbitMqConfiguration);
 
@@ -33,22 +34,24 @@ public static class RabbitMqHelper
 		consumers = consumers.Concat(new List<IConsumer>
 		{
 			new CreateSalesOrderConsumer(repository,
-				mufloneConnectionFactory,
+				rabbitConnectionFactory,
 				loggerFactory),
 			new SalesOrderCreatedConsumer(serviceProvider.GetRequiredService<ISalesOrderService>(),
 				serviceProvider.GetRequiredService<IEventBus>(),
-				mufloneConnectionFactory, loggerFactory),
+				rabbitConnectionFactory, loggerFactory),
 
 			new AvailabilityUpdatedForNotificationConsumer(serviceProvider.GetRequiredService<IServiceBus>(),
-				mufloneConnectionFactory,
+				rabbitConnectionFactory,
 				loggerFactory),
 
-			new UpdateAvailabilityDueToWarehousesNotificationConsumer(repository, mufloneConnectionFactory,
+			new UpdateAvailabilityDueToWarehousesNotificationConsumer(repository, rabbitConnectionFactory,
 				loggerFactory),
 			new AvailabilityUpdatedDueToWarehousesNotificationConsumer(serviceProvider.GetRequiredService<IAvailabilityService>(),
-								mufloneConnectionFactory,
+								rabbitConnectionFactory,
 												loggerFactory)
 		});
+		services.AddMufloneRabbitMQConsumers(consumers);
+		
 
 		return services;
 	}
