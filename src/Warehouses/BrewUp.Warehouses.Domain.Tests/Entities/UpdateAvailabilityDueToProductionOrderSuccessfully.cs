@@ -1,12 +1,12 @@
 ﻿using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
 using BrewUp.Warehouses.Domain.CommandHandlers;
+using BrewUp.Warehouses.Domain.Tests.InMemory;
 using BrewUp.Warehouses.SharedKernel.Commands;
 using BrewUp.Warehouses.SharedKernel.Events;
 using Microsoft.Extensions.Logging.Abstractions;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
-using Muflone.SpecificationTests;
 
 namespace BrewUp.Warehouses.Domain.Tests.Entities;
 
