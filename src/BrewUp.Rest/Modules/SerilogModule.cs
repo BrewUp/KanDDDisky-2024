@@ -7,7 +7,7 @@ public class SerilogModule : IModule
 	public bool IsEnabled => true;
 	public int Order => 0;
 
-	public IServiceCollection RegisterModule(WebApplicationBuilder builder)
+	public IServiceCollection Register(WebApplicationBuilder builder)
 	{
 		var logger = new LoggerConfiguration()
 			.ReadFrom.Configuration(builder.Configuration)
@@ -18,6 +18,6 @@ public class SerilogModule : IModule
 
 		return builder.Services;
 	}
-
-	public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints) => endpoints;
+	
+	WebApplication IModule.Configure(WebApplication app) => app;
 }

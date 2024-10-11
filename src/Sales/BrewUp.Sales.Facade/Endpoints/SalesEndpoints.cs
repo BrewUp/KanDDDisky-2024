@@ -9,9 +9,9 @@ namespace BrewUp.Sales.Facade.Endpoints;
 
 public static class SalesEndpoints
 {
-	public static IEndpointRouteBuilder MapSalesEndpoints(this IEndpointRouteBuilder endpoints)
+	public static WebApplication MapSalesEndpoints(this WebApplication app)
 	{
-		var group = endpoints.MapGroup("/v1/sales/")
+		var group = app.MapGroup("/v1/sales/")
 			.WithTags("Sales");
 
 		group.MapPost("/", HandleCreateOrder)
@@ -24,7 +24,7 @@ public static class SalesEndpoints
 			.Produces(StatusCodes.Status200OK)
 			.WithName("GetSalesOrders");
 
-		return endpoints;
+		return app;
 	}
 
 	public static async Task<IResult> HandleCreateOrder(

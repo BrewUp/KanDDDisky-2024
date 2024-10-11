@@ -5,7 +5,7 @@ public sealed class CorsModule : IModule
 	public bool IsEnabled => true;
 	public int Order => 0;
 
-	public IServiceCollection RegisterModule(WebApplicationBuilder builder)
+	public IServiceCollection Register(WebApplicationBuilder builder)
 	{
 		builder.Services.AddCors(options =>
 		{
@@ -18,5 +18,5 @@ public sealed class CorsModule : IModule
 		return builder.Services;
 	}
 
-	public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints) => endpoints;
+	WebApplication IModule.Configure(WebApplication app) => app;
 }
