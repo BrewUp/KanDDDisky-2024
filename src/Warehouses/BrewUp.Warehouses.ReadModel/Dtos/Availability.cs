@@ -20,6 +20,11 @@ public class Availability : EntityBase
 	{
 		return new Availability(beerId.Value.ToString(), beerName.Value, quantity);
 	}
+	
+	public void UpdateQuantity(Quantity quantity)
+	{
+		Quantity = quantity;
+	}
 
 	private Availability(string beerId, string beerName, Quantity quantity)
 	{

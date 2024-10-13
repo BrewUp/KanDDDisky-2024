@@ -11,7 +11,7 @@
    <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
    <PackageReference Include="Muflone.Saga.Persistence.MongoDb" Version="6.0.0" />
    <PackageReference Include="Muflone.Transport.RabbitMQ" Version="8.1.1" />
-   <PackageReference Include="Muflone.Transport.RabbitMQ.Saga" Version="8.0.0" />
+   <PackageReference Include="Muflone.Transport.RabbitMQ.Saga" Version="8.0.1" />
  </ItemGroup>
 
   <ItemGroup>

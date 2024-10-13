@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="CustomTypes\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Muflone" Version="8.1.2" />
     </ItemGroup>
 

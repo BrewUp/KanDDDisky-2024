@@ -1,6 +1,7 @@
 ﻿using BrewUp.Infrastructure;
 using BrewUp.Infrastructure.MongoDb;
 using BrewUp.Infrastructure.RabbitMq;
+using BrewUp.Saga.Infrastructure.RabbitMq;
 using BrewUp.Sales.Facade;
 using BrewUp.Warehouses.Facade;
 
@@ -24,6 +25,7 @@ public class InfrastructureModule : IModule
 
 		builder.Services.AddSalesInfrastructure(rabbitMqSettings);
 		builder.Services.AddWarehousesInfrastructure(rabbitMqSettings);
+		builder.Services.AddRabbitMqForSagaModule(rabbitMqSettings);
 
 		return builder.Services;
 	}

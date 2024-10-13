@@ -1,8 +1,12 @@
-﻿using BrewUp.Saga.Validators;
+﻿using BrewUp.Saga.Messages.Commands;
+using BrewUp.Saga.Validators;
 using BrewUp.Shared.Contracts;
+using BrewUp.Shared.CustomTypes;
+using BrewUp.Shared.DomainIds;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Muflone.Persistence;
 
 namespace BrewUp.Saga.Endpoints;
 
@@ -25,6 +29,7 @@ public static class SagaEndpoints
         IValidator<SalesOrderJson> validator,
         ValidationHandler validationHandler,
         SalesOrderJson body,
+        IServiceBus serviceBus,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -33,8 +38,17 @@ public static class SagaEndpoints
         if (!validationHandler.IsValid)
             return Results.BadRequest(validationHandler.Errors);
 
-        var salesOrderId = "123"; //await salesUpFacade.CreateOrderAsync(body, cancellationToken);
+        if (string.IsNullOrWhiteSpace(body.SalesOrderId))
+            body = body with { SalesOrderId = Guid.NewGuid().ToString() };
 
-        return Results.Created(new Uri($"/v1/sales/{salesOrderId}", UriKind.Relative), salesOrderId);
+        StartSalesOrderSaga command = new(new SalesOrderId(new Guid(body.SalesOrderId)), Guid.NewGuid(), 
+            new SalesOrderNumber(body.SalesOrderNumber),
+            new OrderDate(body.OrderDate),
+            new CustomerId(body.CustomerId), new CustomerName(body.CustomerName), 
+            body.Rows);
+        await serviceBus.SendAsync(command, cancellationToken);
+        
+
+        return Results.Created(new Uri($"/v1/sales/{body.SalesOrderId}", UriKind.Relative), body.SalesOrderId);
     }
 }

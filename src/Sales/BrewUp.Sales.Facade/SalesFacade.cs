@@ -1,6 +1,5 @@
 ﻿using BrewUp.Sales.ReadModel.Dtos;
 using BrewUp.Sales.SharedKernel.Commands;
-using BrewUp.Sales.SharedKernel.CustomTypes;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;

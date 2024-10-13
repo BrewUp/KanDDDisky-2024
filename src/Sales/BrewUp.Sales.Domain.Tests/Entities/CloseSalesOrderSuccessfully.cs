@@ -1,6 +1,5 @@
 using BrewUp.Sales.Domain.CommandHandlers;
 using BrewUp.Sales.SharedKernel.Commands;
-using BrewUp.Sales.SharedKernel.CustomTypes;
 using BrewUp.Sales.SharedKernel.Events;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;

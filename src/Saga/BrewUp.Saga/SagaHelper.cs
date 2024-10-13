@@ -1,4 +1,5 @@
-﻿using BrewUp.Saga.Validators;
+﻿using BrewUp.Infrastructure.RabbitMq;
+using BrewUp.Saga.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;

@@ -10,6 +10,7 @@ public class Availability : AggregateRoot
 	internal BeerId _beerId;
 	internal BeerName _beerName;
 	internal Quantity _quantity;
+	internal Quantity _committedForSale;
 
 	protected Availability()
 	{
@@ -22,7 +23,23 @@ public class Availability : AggregateRoot
 
 	private Availability(BeerId beerId, BeerName beerName, Quantity quantity, Guid correlationId)
 	{
-		RaiseEvent(new AvailabilityUpdatedDueToProductionOrder(beerId, correlationId, beerName, quantity));
+		RaiseEvent(new BeerAvailabilityCreated(beerId, correlationId, beerName, quantity));
+	}
+	
+	private void Apply(BeerAvailabilityCreated @event)
+	{
+		Id = @event.BeerId;
+
+		_beerId = @event.BeerId;
+		_beerName = @event.BeerName;
+		_quantity = @event.Quantity;
+		_committedForSale = @event.Quantity with {Value = 0};
+	}
+
+	internal void UpdateAvailability(Quantity quantity, Guid correlationId)
+	{
+		quantity = _quantity with { Value = _quantity.Value + quantity.Value };
+		RaiseEvent(new AvailabilityUpdatedDueToProductionOrder(_beerId, correlationId, _beerName, quantity));
 	}
 
 	private void Apply(AvailabilityUpdatedDueToProductionOrder @event)
@@ -34,9 +51,14 @@ public class Availability : AggregateRoot
 		_quantity = @event.Quantity;
 	}
 
-	internal void UpdateAvailability(Quantity quantity, Guid correlationId)
+	public void AskForAvailability(Guid correlationId)
 	{
-		quantity = _quantity with { Value = _quantity.Value + quantity.Value };
-		RaiseEvent(new AvailabilityUpdatedDueToProductionOrder(_beerId, correlationId, _beerName, quantity));
+		var availability = _quantity with {Value = _quantity.Value - _committedForSale.Value};
+		RaiseEvent(new AvailabilityChecked(_beerId, correlationId, availability));
+	}
+	
+	private void Apply(AvailabilityChecked @event)
+	{
+		_committedForSale = _committedForSale with {Value = _committedForSale.Value + @event.Quantity.Value};
 	}
 }
