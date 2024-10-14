@@ -15,10 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="RabbitMq\Events\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\BrewUp.Infrastructure\BrewUp.Infrastructure.csproj" />
       <ProjectReference Include="..\BrewUp.Saga\BrewUp.Saga.csproj" />
     </ItemGroup>

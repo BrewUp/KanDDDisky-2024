@@ -1,5 +1,6 @@
 ﻿using BrewUp.Infrastructure.RabbitMq;
 using BrewUp.Saga.Infrastructure.RabbitMq.Commands;
+using BrewUp.Saga.Infrastructure.RabbitMq.Events;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Muflone;
@@ -35,6 +36,13 @@ public static class RabbitMqHelper
 				rabbitConnectionFactory,
 				loggerFactory,
 				serviceProvider.GetRequiredService<IServiceBus>()),
+			
+			new BeerAvailabilityCommunicatedConsumer(rabbitConnectionFactory, loggerFactory,
+				serviceProvider.GetRequiredService<IServiceBus>(),
+				repository),
+			new SalesOrderCreatedCommunicatedConsumer(rabbitConnectionFactory, loggerFactory,
+				serviceProvider.GetRequiredService<IServiceBus>(),
+				repository)
 		});
 		services.AddMufloneRabbitMQConsumers(consumers);
 		

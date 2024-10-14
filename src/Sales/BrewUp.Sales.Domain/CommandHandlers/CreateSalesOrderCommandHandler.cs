@@ -5,12 +5,9 @@ using Muflone.Persistence;
 
 namespace BrewUp.Sales.Domain.CommandHandlers;
 
-public sealed class CreateSalesOrderCommandHandler : CommandHandlerBaseAsync<CreateSalesOrder>
+public sealed class CreateSalesOrderCommandHandler(IRepository repository, ILoggerFactory loggerFactory)
+	: CommandHandlerBaseAsync<CreateSalesOrder>(repository, loggerFactory)
 {
-	public CreateSalesOrderCommandHandler(IRepository repository, ILoggerFactory loggerFactory) : base(repository, loggerFactory)
-	{
-	}
-
 	public override async Task ProcessCommand(CreateSalesOrder command, CancellationToken cancellationToken = default)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
