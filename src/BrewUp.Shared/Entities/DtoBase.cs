@@ -1,6 +1,6 @@
 ﻿namespace BrewUp.Shared.Entities;
 
-public abstract class EntityBase : IEquatable<EntityBase>
+public abstract class DtoBase : IEquatable<DtoBase>
 {
     public string Id { get; set; } = string.Empty;
 
@@ -11,15 +11,15 @@ public abstract class EntityBase : IEquatable<EntityBase>
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as EntityBase);
+        return Equals(obj as DtoBase);
     }
 
-    public bool Equals(EntityBase? other)
+    public bool Equals(DtoBase? other)
     {
         return null != other && GetType() == other.GetType() && other.Id == Id;
     }
 
-    public static bool operator ==(EntityBase? entity1, EntityBase? entity2)
+    public static bool operator ==(DtoBase? entity1, DtoBase? entity2)
     {
         if ((object)entity1 == null && (object)entity2 == null)
             return true;
@@ -29,7 +29,7 @@ public abstract class EntityBase : IEquatable<EntityBase>
         return entity1.GetType() == entity2.GetType() && entity1.Id == entity2.Id;
     }
 
-    public static bool operator !=(EntityBase? entity1, EntityBase? entity2)
+    public static bool operator !=(DtoBase? entity1, DtoBase? entity2)
     {
         return !(entity1 == entity2);
     }

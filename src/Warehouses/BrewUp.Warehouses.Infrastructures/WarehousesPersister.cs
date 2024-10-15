@@ -17,7 +17,7 @@ public class WarehousesPersister : IPersister
 		_database = mongoClient.GetDatabase("Warehouses");
 	}
 
-	public async Task<T> GetByIdAsync<T>(string id, CancellationToken cancellationToken) where T : EntityBase
+	public async Task<T> GetByIdAsync<T>(string id, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -38,7 +38,7 @@ public class WarehousesPersister : IPersister
 		}
 	}
 
-	public async Task InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : EntityBase
+	public async Task InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -55,7 +55,7 @@ public class WarehousesPersister : IPersister
 		}
 	}
 
-	public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken) where T : EntityBase
+	public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -72,7 +72,7 @@ public class WarehousesPersister : IPersister
 		}
 	}
 
-	public async Task DeleteAsync<T>(T entity, CancellationToken cancellationToken) where T : EntityBase
+	public async Task DeleteAsync<T>(T entity, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 

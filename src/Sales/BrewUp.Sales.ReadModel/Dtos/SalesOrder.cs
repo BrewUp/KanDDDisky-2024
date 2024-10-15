@@ -6,7 +6,7 @@ using BrewUp.Shared.Entities;
 
 namespace BrewUp.Sales.ReadModel.Dtos;
 
-public class SalesOrder : EntityBase
+public class SalesOrder : DtoBase
 {
 	public string OrderNumber { get; private set; } = string.Empty;
 

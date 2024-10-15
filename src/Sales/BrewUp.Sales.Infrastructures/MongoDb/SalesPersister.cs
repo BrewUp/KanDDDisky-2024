@@ -16,7 +16,7 @@ public class SalesPersister : IPersister
 		_logger = loggerFactory.CreateLogger(GetType());
 	}
 
-	public async Task<T> GetByIdAsync<T>(string id, CancellationToken cancellationToken) where T : EntityBase
+	public async Task<T> GetByIdAsync<T>(string id, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -36,7 +36,7 @@ public class SalesPersister : IPersister
 		}
 	}
 
-	public async Task InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : EntityBase
+	public async Task InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -53,7 +53,7 @@ public class SalesPersister : IPersister
 		}
 	}
 
-	public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken) where T : EntityBase
+	public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -70,7 +70,7 @@ public class SalesPersister : IPersister
 		}
 	}
 
-	public async Task DeleteAsync<T>(T entity, CancellationToken cancellationToken) where T : EntityBase
+	public async Task DeleteAsync<T>(T entity, CancellationToken cancellationToken) where T : DtoBase
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 

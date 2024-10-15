@@ -1,20 +1,20 @@
-﻿using BrewUp.Shared.Entities;
+﻿using System.Linq.Expressions;
+using BrewUp.Shared.Entities;
 using BrewUp.Shared.ReadModel;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using System.Linq.Expressions;
 
-namespace BrewUp.Warehouses.Infrastructures;
+namespace BrewUp.Payments.Infrastructures.MongoDb;
 
-public abstract class WarehousesQueries<T> : IQueries<T> where T : DtoBase
+public abstract class PaymentsQueries<T> : IQueries<T> where T : DtoBase
 {
 	protected readonly IMongoClient MongoClient;
 	protected IMongoDatabase Database;
 
-	protected WarehousesQueries(IMongoClient mongoClient)
+	protected PaymentsQueries(IMongoClient mongoClient)
 	{
 		MongoClient = mongoClient;
-		Database = MongoClient.GetDatabase("Warehouses");
+		Database = MongoClient.GetDatabase("Payments");
 	}
 
 	public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken)

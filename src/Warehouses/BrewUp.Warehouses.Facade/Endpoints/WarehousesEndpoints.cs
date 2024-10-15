@@ -3,7 +3,6 @@ using BrewUp.Warehouses.SharedKernel.Contracts;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 
 namespace BrewUp.Warehouses.Facade.Endpoints;
 

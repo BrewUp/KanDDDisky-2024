@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace BrewUp.Infrastructure.MongoDb.Readmodel;
 
-public abstract class Queries<T> : IQueries<T> where T : EntityBase
+public abstract class Queries<T> : IQueries<T> where T : DtoBase
 {
 	protected readonly IMongoClient MongoClient;
 	protected IMongoDatabase Database;
