@@ -20,6 +20,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\BrewUp.Infrastructure\BrewUp.Infrastructure.csproj" />
       <ProjectReference Include="..\..\BrewUp.Shared\BrewUp.Shared.csproj" />
+      <ProjectReference Include="..\..\Payments\BrewUp.Payments.SharedKernel\BrewUp.Payments.SharedKernel.csproj" />
     </ItemGroup>
 
 </Project>

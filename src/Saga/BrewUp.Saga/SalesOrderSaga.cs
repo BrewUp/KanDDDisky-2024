@@ -1,4 +1,5 @@
-﻿using BrewUp.Saga.Messages.Commands;
+﻿using BrewUp.Payments.SharedKernel.Commands;
+using BrewUp.Saga.Messages.Commands;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
@@ -14,7 +15,9 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
     : Saga<SalesOrderSaga.SalesOrderSagaState>(serviceBus, repository, loggerFactory),
         ISagaStartedByAsync<StartSalesOrderSaga>,
         ISagaEventHandlerAsync<BeerAvailabilityCommunicated>,
-        ISagaEventHandlerAsync<SalesOrderCreatedCommunicated>
+        ISagaEventHandlerAsync<SalesOrderCreatedCommunicated>,
+        ISagaEventHandlerAsync<PaymentAccepted>,
+        ISagaEventHandlerAsync<PaymentRejected>
 {
     public class SalesOrderSagaState
     {
@@ -31,8 +34,10 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         public bool AvailabilityChecked { get; set; }
         public bool SalesOrderCreated { get; set; }
         public bool SalesOrderProcessed { get; set; }
+        
+        public bool PaymentAccepted { get; set; }
+        public bool PaymentRejected { get; set; }
     }
-
 
     public async Task StartedByAsync(StartSalesOrderSaga command)
     {
@@ -91,6 +96,34 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         // Restore and Update the saga state
         SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
         SagaState.SalesOrderCreated = true;
+        await Repository.SaveAsync(correlationId, SagaState);
+        
+        WithdrawingMoney command = new(new CustomerId(new Guid(SagaState.CustomerId)), correlationId,
+            SagaState.CustomerName, new Amount(SagaState.Rows.Sum(r => r.Price.Value * r.Quantity.Value), "EUR"));
+        await ServiceBus.SendAsync(command, CancellationToken.None);
+    }
+
+    public async Task HandleAsync(PaymentAccepted @event)
+    {
+        // Read correlationId from the event
+        var correlationId =
+            new Guid(@event.UserProperties.FirstOrDefault(u => u.Key.Equals("CorrelationId")).Value.ToString()!);
+        
+        // Restore and Update the saga state
+        SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
+        SagaState.PaymentAccepted = true;
+        await Repository.SaveAsync(correlationId, SagaState);
+    }
+
+    public async Task HandleAsync(PaymentRejected @event)
+    {
+        // Read correlationId from the event
+        var correlationId =
+            new Guid(@event.UserProperties.FirstOrDefault(u => u.Key.Equals("CorrelationId")).Value.ToString()!);
+        
+        // Restore and Update the saga state
+        SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
+        SagaState.PaymentRejected = true;
         await Repository.SaveAsync(correlationId, SagaState);
     }
 }

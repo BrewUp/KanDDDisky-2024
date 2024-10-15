@@ -42,6 +42,13 @@ public static class RabbitMqHelper
 				repository),
 			new SalesOrderCreatedCommunicatedConsumer(rabbitConnectionFactory, loggerFactory,
 				serviceProvider.GetRequiredService<IServiceBus>(),
+				repository),
+			
+			new PaymentAcceptedConsumer(rabbitConnectionFactory, loggerFactory,
+				serviceProvider.GetRequiredService<IServiceBus>(),
+				repository),
+			new PaymentRejectedConsumer(rabbitConnectionFactory, loggerFactory,
+				serviceProvider.GetRequiredService<IServiceBus>(),
 				repository)
 		});
 		services.AddMufloneRabbitMQConsumers(consumers);

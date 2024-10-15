@@ -75,6 +75,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewUp.Payments.Domain", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewUp.Payments.ReadModel", "Payments\BrewUp.Payments.ReadModel\BrewUp.Payments.ReadModel.csproj", "{80A1C813-1C8F-4D94-AE14-9C06B7CF6A94}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F64424AA-B47A-437A-92EB-588DD043C763}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1BrewUp.Payments.Domain.Tests", "Payments\TestProject1BrewUp.Payments.Domain.Tests\TestProject1BrewUp.Payments.Domain.Tests.csproj", "{C4F40022-B2D4-41C0-BD08-AA4E43120A7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +185,10 @@ Global
 		{80A1C813-1C8F-4D94-AE14-9C06B7CF6A94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A1C813-1C8F-4D94-AE14-9C06B7CF6A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A1C813-1C8F-4D94-AE14-9C06B7CF6A94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4F40022-B2D4-41C0-BD08-AA4E43120A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4F40022-B2D4-41C0-BD08-AA4E43120A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4F40022-B2D4-41C0-BD08-AA4E43120A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4F40022-B2D4-41C0-BD08-AA4E43120A7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -218,6 +226,8 @@ Global
 		{4082D397-EC88-4147-8142-2679CDE3415F} = {BCB9D81D-046A-4C35-9577-064CAF1E6630}
 		{FD8C1075-0E7A-4CFF-B08C-2505D12D2F8F} = {BCB9D81D-046A-4C35-9577-064CAF1E6630}
 		{80A1C813-1C8F-4D94-AE14-9C06B7CF6A94} = {BCB9D81D-046A-4C35-9577-064CAF1E6630}
+		{F64424AA-B47A-437A-92EB-588DD043C763} = {BCB9D81D-046A-4C35-9577-064CAF1E6630}
+		{C4F40022-B2D4-41C0-BD08-AA4E43120A7F} = {F64424AA-B47A-437A-92EB-588DD043C763}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D64E812-8929-4A40-AA7D-CD28DB67CA9C}

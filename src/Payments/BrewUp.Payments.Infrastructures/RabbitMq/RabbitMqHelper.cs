@@ -40,7 +40,18 @@ public static class RabbitMqHelper
 			
 			new DepositMoneyConsumer(repository,
 				rabbitConnectionFactory,
-				loggerFactory)
+				loggerFactory),
+			new MoneyDepositedConsumer(serviceProvider.GetRequiredService<ISavingsAccountService>(),
+				rabbitConnectionFactory, loggerFactory),
+			
+			new WithdrawingMoneyConsumer(repository,
+				rabbitConnectionFactory,
+				loggerFactory),
+			new MoneyWithdrawnAcceptedConsumer(serviceProvider.GetRequiredService<ISavingsAccountService>(),
+				serviceProvider.GetRequiredService<IEventBus>(),
+				rabbitConnectionFactory, loggerFactory),
+			new MoneyWithdrawnRejectedConsumer(serviceProvider.GetRequiredService<IEventBus>(),
+				rabbitConnectionFactory, loggerFactory)
 
 		});
 		services.AddMufloneRabbitMQConsumers(consumers);

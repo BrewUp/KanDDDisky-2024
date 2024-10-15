@@ -2,7 +2,7 @@
 using BrewUp.Shared.DomainIds;
 using Muflone.Messages.Commands;
 
-namespace BrewUp.Payments.SharedKernel.Commands;
+namespace BrewUp.Saga.Infrastructure.RabbitMq.Commands;
 
 public sealed class WithdrawingMoney(CustomerId aggregateId, Guid commitId,
     CustomerName customerName,
