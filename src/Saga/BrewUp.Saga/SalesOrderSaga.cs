@@ -1,5 +1,6 @@
 ﻿using BrewUp.Payments.SharedKernel.Commands;
 using BrewUp.Saga.Messages.Commands;
+using BrewUp.Saga.Models;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
@@ -29,6 +30,8 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         public string CustomerId { get; set; } = default!;
         public CustomerName CustomerName { get; set; } = default!;
         public IEnumerable<SalesOrderRowJson> Rows { get; set; } = default!;
+        public IEnumerable<BeerAvailabilities> Availabilities { get; set; } = [];
+            
 
         public int RowsChecked { get; set; } = 0;
         public bool AvailabilityChecked { get; set; }
@@ -53,6 +56,8 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
             CustomerName = command.CustomerName,
             Rows = command.Rows,
             
+            Availabilities = command.Rows.Select(r => new BeerAvailabilities(r.BeerId, r.Quantity, new Quantity(0, string.Empty))),
+            
             AvailabilityChecked = false,
             SalesOrderCreated = false,
             SalesOrderProcessed = false
@@ -75,7 +80,22 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         // Restore and Update the saga state
         SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
         SagaState.RowsChecked++;
-        if (SagaState.RowsChecked == SagaState.Rows.Count())
+        
+        var row = SagaState.Availabilities.FirstOrDefault(a => a.BeerId.ToString() == @event.BeerId.Value);
+        if (row != null)
+        {
+            // Replace row with updated availability
+            SagaState.Availabilities = SagaState.Availabilities.Where(b => b.BeerId.ToString() != @event.BeerId.Value)
+                .ToList();
+            SagaState.Availabilities = SagaState.Availabilities.Concat(new List<BeerAvailabilities>
+            {
+                row with {Availability = @event.Availability}
+            });
+        }
+
+        var beerAvailabilitiesArray = SagaState.Availabilities as BeerAvailabilities[] ?? SagaState.Availabilities.ToArray();
+        if (SagaState.RowsChecked == SagaState.Rows.Count() && 
+            beerAvailabilitiesArray.Sum(a => a.Quantity.Value) <= beerAvailabilitiesArray.Sum(a => a.Availability.Value))
         {
             SagaState.AvailabilityChecked = true;
             CreateSalesOrder command = new(new SalesOrderId(new Guid(SagaState.SalesOrderId)), correlationId,
@@ -84,6 +104,8 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
                 SagaState.Rows);
             await ServiceBus.SendAsync(command, CancellationToken.None);
         }
+        // TODO: Handle the case when the availability is not enough
+        
         await Repository.SaveAsync(correlationId, SagaState);
     }
 
@@ -125,5 +147,19 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
         SagaState.PaymentRejected = true;
         await Repository.SaveAsync(correlationId, SagaState);
+
+        foreach (var row in SagaState.Rows)
+        {
+            RestoreCommittedForSale command = new(new BeerId(row.BeerId), correlationId, row.Quantity);
+            await ServiceBus.SendAsync(command, CancellationToken.None);
+        }
     }
+
+    #region Dispose
+    
+    public void Dispose()
+    {
+        loggerFactory.Dispose();
+    }
+    #endregion
 }

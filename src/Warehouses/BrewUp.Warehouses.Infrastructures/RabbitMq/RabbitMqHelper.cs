@@ -52,6 +52,9 @@ public static class RabbitMqHelper
 				loggerFactory),
 			new AvailabilityCheckedConsumer(serviceProvider.GetRequiredService<IEventBus>(),
 				connectionFactory,
+				loggerFactory),
+			new BeerNotAvailableConsumer(serviceProvider.GetRequiredService<IEventBus>(),
+				connectionFactory,
 				loggerFactory)
 		});
 		services.AddMufloneRabbitMQConsumers(consumers);

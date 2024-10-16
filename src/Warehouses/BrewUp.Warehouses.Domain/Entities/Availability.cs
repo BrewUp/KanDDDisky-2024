@@ -9,7 +9,7 @@ public class Availability : AggregateRoot
 {
 	internal BeerId _beerId;
 	internal BeerName _beerName;
-	internal Quantity _quantity;
+	internal Quantity _quantity = new(0, string.Empty);
 	internal Quantity _committedForSale;
 
 	protected Availability()
@@ -56,17 +56,25 @@ public class Availability : AggregateRoot
 	{
 		// Check if there is enough availability and raise a different event if not
 		var availability = _quantity with {Value = _quantity.Value - _committedForSale.Value - quantity.Value};
-		RaiseEvent(new AvailabilityChecked(_beerId, correlationId, availability));
+		if (availability.Value >= 0)
+			RaiseEvent(new AvailabilityChecked(_beerId, correlationId, availability));
+		else
+			RaiseEvent(new BeerNotAvailable(_beerId, correlationId));
 	}
 	
 	private void Apply(AvailabilityChecked @event)
 	{
 		_committedForSale = _committedForSale with {Value = _committedForSale.Value + @event.Quantity.Value};
 	}
+
+	private void Apply(BeerNotAvailable @event)
+	{
+		// Do nothing
+	}
 	
 	internal void RestoreCommittedForSale(Quantity quantity, Guid correlationId)
 	{
-		_committedForSale = _committedForSale with {Value = _committedForSale.Value + quantity.Value};
+		_committedForSale = _committedForSale with {Value = _committedForSale.Value - quantity.Value};
 		RaiseEvent(new CommittedForSaleRestored(_beerId, correlationId, _quantity));
 	}
 	
