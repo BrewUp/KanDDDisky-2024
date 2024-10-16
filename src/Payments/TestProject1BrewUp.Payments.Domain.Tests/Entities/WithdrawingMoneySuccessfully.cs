@@ -10,7 +10,7 @@ using TestProject1BrewUp.Payments.Domain.Tests.InMemory;
 
 namespace TestProject1BrewUp.Payments.Domain.Tests.Entities;
 
-public sealed class WithdrawingMoneySuccessfully : CommandSpecification<WithdrawingMoney>
+public sealed class WithdrawingMoneySuccessfully : CommandSpecification<WithdrawMoney>
 {
     private CustomerId _customerId = new(Guid.NewGuid());
     private CustomerName _customerName = new("Muflone");
@@ -26,18 +26,18 @@ public sealed class WithdrawingMoneySuccessfully : CommandSpecification<Withdraw
         yield return new MoneyDeposited(_customerId, _amount);
     }
 
-    protected override WithdrawingMoney When()
+    protected override WithdrawMoney When()
     {
-        return new WithdrawingMoney(_customerId, _correlationId, _customerName, _withdrawn);
+        return new WithdrawMoney(_customerId, _correlationId, _customerName, _withdrawn);
     }
 
-    protected override ICommandHandlerAsync<WithdrawingMoney> OnHandler()
+    protected override ICommandHandlerAsync<WithdrawMoney> OnHandler()
     {
-        return new WithdrawingMoneyCommandHandler(Repository, new NullLoggerFactory());
+        return new WithdrawMoneyCommandHandler(Repository, new NullLoggerFactory());
     }
 
     protected override IEnumerable<DomainEvent> Expect()
     {
-        yield return new MoneyWithdrawnAccepted(_customerId, _correlationId, _withdrawn);
+        yield return new MoneyWithdrawAccepted(_customerId, _correlationId, _withdrawn);
     }
 }

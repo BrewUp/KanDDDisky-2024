@@ -4,7 +4,7 @@ using Muflone.Messages.Events;
 
 namespace BrewUp.Payments.SharedKernel.Events;
 
-public sealed class MoneyWithdrawnAccepted(CustomerId aggregateId, Guid commitId,
+public sealed class MoneyWithdrawAccepted(CustomerId aggregateId, Guid commitId,
     Amount amount) : DomainEvent(aggregateId, commitId)
 {
     public readonly CustomerId CustomerId = aggregateId;

@@ -119,7 +119,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         SagaState.SalesOrderCreated = true;
         await Repository.SaveAsync(correlationId, SagaState);
         
-        WithdrawingMoney command = new(new CustomerId(new Guid(SagaState.CustomerId)), correlationId,
+        WithdrawMoney command = new(new CustomerId(new Guid(SagaState.CustomerId)), correlationId,
             SagaState.CustomerName, new Amount(SagaState.Rows.Sum(r => r.Price.Value * r.Quantity.Value), "EUR"));
         await ServiceBus.SendAsync(command, CancellationToken.None);
     }

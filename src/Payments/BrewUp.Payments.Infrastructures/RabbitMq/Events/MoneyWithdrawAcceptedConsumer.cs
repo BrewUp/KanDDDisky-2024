@@ -9,13 +9,13 @@ using Muflone.Transport.RabbitMQ.Consumers;
 
 namespace BrewUp.Payments.Infrastructures.RabbitMq.Events;
 
-public sealed class MoneyWithdrawnAcceptedConsumer(ISavingsAccountService savingsAccountService,
+public sealed class MoneyWithdrawAcceptedConsumer(ISavingsAccountService savingsAccountService,
     IEventBus eventBus,
     IRabbitMQConnectionFactory connectionFactory,
-    ILoggerFactory loggerFactory) : DomainEventsConsumerBase<MoneyWithdrawnAccepted>(connectionFactory, loggerFactory)
+    ILoggerFactory loggerFactory) : DomainEventsConsumerBase<MoneyWithdrawAccepted>(connectionFactory, loggerFactory)
 {
-    protected override IEnumerable<IDomainEventHandlerAsync<MoneyWithdrawnAccepted>> HandlersAsync { get; } =
-        new List<IDomainEventHandlerAsync<MoneyWithdrawnAccepted>>
+    protected override IEnumerable<IDomainEventHandlerAsync<MoneyWithdrawAccepted>> HandlersAsync { get; } =
+        new List<IDomainEventHandlerAsync<MoneyWithdrawAccepted>>
         {
             new MoneyWithdrawnAcceptedEventHandler(savingsAccountService, loggerFactory),
             new MoneyWithdrawnAcceptedForIntegrationEventHandler(eventBus, loggerFactory)

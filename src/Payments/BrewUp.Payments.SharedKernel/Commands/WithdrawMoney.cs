@@ -4,7 +4,7 @@ using Muflone.Messages.Commands;
 
 namespace BrewUp.Payments.SharedKernel.Commands;
 
-public sealed class WithdrawingMoney(CustomerId aggregateId, Guid commitId,
+public sealed class WithdrawMoney(CustomerId aggregateId, Guid commitId,
     CustomerName customerName,
     Amount amount) : Command(aggregateId, commitId)
 {

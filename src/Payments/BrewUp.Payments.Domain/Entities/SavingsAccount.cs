@@ -47,18 +47,18 @@ public sealed class SavingsAccount : AggregateRoot
         if (_balance.Value > amount.Value)
         {
             amount = amount with {Value = _balance.Value - amount.Value};
-            RaiseEvent(new MoneyWithdrawnAccepted((CustomerId)Id, correlationId, amount));
+            RaiseEvent(new MoneyWithdrawAccepted((CustomerId)Id, correlationId, amount));
         }
         else
-            RaiseEvent(new MoneyWithdrawnRejected((CustomerId)Id, correlationId));
+            RaiseEvent(new MoneyWithdrawRejected((CustomerId)Id, correlationId));
     }
     
-    private void Apply(MoneyWithdrawnAccepted @event)
+    private void Apply(MoneyWithdrawAccepted @event)
     {
         _balance = new Balance(@event.Amount.Value, @event.Amount.Currency);
     }
     
-    private void Apply(MoneyWithdrawnRejected @event)
+    private void Apply(MoneyWithdrawRejected @event)
     {
         // Do nothing
     }

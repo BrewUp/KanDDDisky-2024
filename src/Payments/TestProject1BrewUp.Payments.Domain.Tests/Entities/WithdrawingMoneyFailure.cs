@@ -10,7 +10,7 @@ using TestProject1BrewUp.Payments.Domain.Tests.InMemory;
 
 namespace TestProject1BrewUp.Payments.Domain.Tests.Entities;
 
-public sealed class WithdrawingMoneyFailure : CommandSpecification<WithdrawingMoney>
+public sealed class WithdrawingMoneyFailure : CommandSpecification<WithdrawMoney>
 {
     private CustomerId _customerId = new(Guid.NewGuid());
     private CustomerName _customerName = new("Muflone");
@@ -24,22 +24,22 @@ public sealed class WithdrawingMoneyFailure : CommandSpecification<WithdrawingMo
     {
         yield return new SavingsAccountCreated(_customerId, _customerName);
         yield return new MoneyDeposited(_customerId, _amount);
-        yield return new MoneyWithdrawnAccepted(_customerId, _correlationId, _withdrawn);
-        yield return new MoneyWithdrawnAccepted(_customerId, _correlationId, _withdrawn);
+        yield return new MoneyWithdrawAccepted(_customerId, _correlationId, _withdrawn);
+        yield return new MoneyWithdrawAccepted(_customerId, _correlationId, _withdrawn);
     }
 
-    protected override WithdrawingMoney When()
+    protected override WithdrawMoney When()
     {
-        return new WithdrawingMoney(_customerId, _correlationId, _customerName, _withdrawn);
+        return new WithdrawMoney(_customerId, _correlationId, _customerName, _withdrawn);
     }
 
-    protected override ICommandHandlerAsync<WithdrawingMoney> OnHandler()
+    protected override ICommandHandlerAsync<WithdrawMoney> OnHandler()
     {
-        return new WithdrawingMoneyCommandHandler(Repository, new NullLoggerFactory());
+        return new WithdrawMoneyCommandHandler(Repository, new NullLoggerFactory());
     }
 
     protected override IEnumerable<DomainEvent> Expect()
     {
-        yield return new MoneyWithdrawnRejected(_customerId, _correlationId);
+        yield return new MoneyWithdrawRejected(_customerId, _correlationId);
     }
 }

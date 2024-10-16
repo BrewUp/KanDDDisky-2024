@@ -8,11 +8,11 @@ using Muflone.Transport.RabbitMQ.Consumers;
 
 namespace BrewUp.Payments.Infrastructures.RabbitMq.Commands;
 
-public sealed class WithdrawingMoneyConsumer(IRepository repository,
+public sealed class WithdrawMoneyConsumer(IRepository repository,
     IRabbitMQConnectionFactory connectionFactory,
     ILoggerFactory loggerFactory) 
-    : CommandConsumerBase<WithdrawingMoney>(repository, connectionFactory, loggerFactory)
+    : CommandConsumerBase<WithdrawMoney>(repository, connectionFactory, loggerFactory)
 {
-    protected override ICommandHandlerAsync<WithdrawingMoney> HandlerAsync { get; } =
-        new WithdrawingMoneyCommandHandler(repository, loggerFactory);
+    protected override ICommandHandlerAsync<WithdrawMoney> HandlerAsync { get; } =
+        new WithdrawMoneyCommandHandler(repository, loggerFactory);
 }

@@ -6,10 +6,10 @@ using Muflone.Persistence;
 
 namespace BrewUp.Payments.Domain.CommandHandlers;
 
-public sealed class WithdrawingMoneyCommandHandler(IRepository repository, ILoggerFactory loggerFactory)
-    : CommandHandlerAsync<WithdrawingMoney>(repository, loggerFactory)
+public sealed class WithdrawMoneyCommandHandler(IRepository repository, ILoggerFactory loggerFactory)
+    : CommandHandlerAsync<WithdrawMoney>(repository, loggerFactory)
 {
-    public override async Task HandleAsync(WithdrawingMoney command, CancellationToken cancellationToken = default)
+    public override async Task HandleAsync(WithdrawMoney command, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

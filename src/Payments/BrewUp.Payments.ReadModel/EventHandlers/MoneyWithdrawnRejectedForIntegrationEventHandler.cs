@@ -6,9 +6,9 @@ using Muflone;
 namespace BrewUp.Payments.ReadModel.EventHandlers;
 
 public sealed class MoneyWithdrawnRejectedForIntegrationEventHandler(IEventBus eventBus,
-    ILoggerFactory loggerFactory) : DomainEventHandlerBase<MoneyWithdrawnRejected>(loggerFactory)
+    ILoggerFactory loggerFactory) : DomainEventHandlerBase<MoneyWithdrawRejected>(loggerFactory)
 {
-    public override async Task HandleAsync(MoneyWithdrawnRejected @event, CancellationToken cancellationToken = default)
+    public override async Task HandleAsync(MoneyWithdrawRejected @event, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

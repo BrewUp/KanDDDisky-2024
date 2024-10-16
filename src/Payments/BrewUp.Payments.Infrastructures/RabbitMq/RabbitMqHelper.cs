@@ -44,13 +44,13 @@ public static class RabbitMqHelper
 			new MoneyDepositedConsumer(serviceProvider.GetRequiredService<ISavingsAccountService>(),
 				rabbitConnectionFactory, loggerFactory),
 			
-			new WithdrawingMoneyConsumer(repository,
+			new WithdrawMoneyConsumer(repository,
 				rabbitConnectionFactory,
 				loggerFactory),
-			new MoneyWithdrawnAcceptedConsumer(serviceProvider.GetRequiredService<ISavingsAccountService>(),
+			new MoneyWithdrawAcceptedConsumer(serviceProvider.GetRequiredService<ISavingsAccountService>(),
 				serviceProvider.GetRequiredService<IEventBus>(),
 				rabbitConnectionFactory, loggerFactory),
-			new MoneyWithdrawnRejectedConsumer(serviceProvider.GetRequiredService<IEventBus>(),
+			new MoneyWithdrawRejectedConsumer(serviceProvider.GetRequiredService<IEventBus>(),
 				rabbitConnectionFactory, loggerFactory)
 
 		});
