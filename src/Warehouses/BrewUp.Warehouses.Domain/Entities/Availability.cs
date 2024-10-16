@@ -18,6 +18,7 @@ public class Availability : AggregateRoot
 
 	internal static Availability CreateAvailability(BeerId beerId, BeerName beerName, Quantity quantity, Guid correlationId)
 	{
+		// Check invariant here!
 		return new Availability(beerId, beerName, quantity, correlationId);
 	}
 
@@ -51,14 +52,26 @@ public class Availability : AggregateRoot
 		_quantity = @event.Quantity;
 	}
 
-	public void AskForAvailability(Guid correlationId)
+	internal void AskForAvailability(Quantity quantity, Guid correlationId)
 	{
-		var availability = _quantity with {Value = _quantity.Value - _committedForSale.Value};
+		// Check if there is enough availability and raise a different event if not
+		var availability = _quantity with {Value = _quantity.Value - _committedForSale.Value - quantity.Value};
 		RaiseEvent(new AvailabilityChecked(_beerId, correlationId, availability));
 	}
 	
 	private void Apply(AvailabilityChecked @event)
 	{
 		_committedForSale = _committedForSale with {Value = _committedForSale.Value + @event.Quantity.Value};
+	}
+	
+	internal void RestoreCommittedForSale(Quantity quantity, Guid correlationId)
+	{
+		_committedForSale = _committedForSale with {Value = _committedForSale.Value + quantity.Value};
+		RaiseEvent(new CommittedForSaleRestored(_beerId, correlationId, _quantity));
+	}
+	
+	private void Apply(CommittedForSaleRestored @event)
+	{
+		_committedForSale = @event.Quantity;
 	}
 }

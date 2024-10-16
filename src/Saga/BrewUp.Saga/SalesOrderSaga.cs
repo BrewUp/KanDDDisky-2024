@@ -61,7 +61,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
 
         foreach (var row in command.Rows)
         {
-            AskForBeerAvailability rowCommand = new(new BeerId(row.BeerId), command.MessageId);
+            AskForBeerAvailability rowCommand = new(new BeerId(row.BeerId), command.MessageId, row.Quantity);
             await ServiceBus.SendAsync(rowCommand, CancellationToken.None);
         }
     }

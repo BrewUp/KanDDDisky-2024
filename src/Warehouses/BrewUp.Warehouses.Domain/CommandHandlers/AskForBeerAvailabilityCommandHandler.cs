@@ -11,7 +11,7 @@ public sealed class AskForBeerAvailabilityCommandHandler(IRepository repository,
     public override async Task ProcessCommand(AskForBeerAvailability command, CancellationToken cancellationToken = default)
     {
         var aggregate = await Repository.GetByIdAsync<Entities.Availability>(command.BeerId, cancellationToken);
-        aggregate!.AskForAvailability(command.MessageId);
+        aggregate!.AskForAvailability(command.Quantity, command.MessageId);
         await Repository.SaveAsync(aggregate, Guid.NewGuid(), cancellationToken);
     }
 }
