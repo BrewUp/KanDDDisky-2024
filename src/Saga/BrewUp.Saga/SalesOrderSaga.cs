@@ -13,8 +13,7 @@ using Muflone.Saga.Persistence;
 namespace BrewUp.Saga;
 
 public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, ILoggerFactory loggerFactory)
-    : Saga<SalesOrderSaga.SalesOrderSagaState>(serviceBus, repository, loggerFactory),
-        ISagaStartedByAsync<StartSalesOrderSaga>,
+    : Saga<StartSalesOrderSaga, SalesOrderSaga.SalesOrderSagaState>(serviceBus, repository, loggerFactory),
         ISagaEventHandlerAsync<BeerAvailabilityCommunicated>,
         ISagaEventHandlerAsync<SalesOrderCreatedCommunicated>,
         ISagaEventHandlerAsync<PaymentAccepted>,
@@ -42,7 +41,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         public bool PaymentRejected { get; set; }
     }
 
-    public async Task StartedByAsync(StartSalesOrderSaga command)
+    public override async Task StartedByAsync(StartSalesOrderSaga command)
     {
         SagaState = new SalesOrderSagaState
         {

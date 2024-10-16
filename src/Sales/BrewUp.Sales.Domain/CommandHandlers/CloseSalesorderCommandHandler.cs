@@ -1,14 +1,15 @@
 using BrewUp.Sales.Domain.Entities;
 using BrewUp.Sales.SharedKernel.Commands;
 using Microsoft.Extensions.Logging;
+using Muflone.Messages.Commands;
 using Muflone.Persistence;
 
 namespace BrewUp.Sales.Domain.CommandHandlers;
 
 public class CloseSalesOrderCommandHandler(IRepository repository, ILoggerFactory loggerFactory)
-    : CommandHandlerBaseAsync<CloseSalesOrder>(repository, loggerFactory)
+    : CommandHandlerAsync<CloseSalesOrder>(repository, loggerFactory)
 {
-    public override async Task ProcessCommand(CloseSalesOrder command, CancellationToken cancellationToken = default)
+    public override async Task HandleAsync(CloseSalesOrder command, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         

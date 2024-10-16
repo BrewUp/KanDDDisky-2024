@@ -26,7 +26,6 @@ public class SalesOrderSagaTest
     private readonly Price _price = new(3.5m, "€");
 
     private readonly Guid _correlationId = Guid.NewGuid();
-    //private IServiceBus _serviceBus = new InMe
 
     public SalesOrderSagaTest()
     {
