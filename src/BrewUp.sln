@@ -83,6 +83,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{72E1252E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewUp.Saga.Tests", "Saga\BrewUp.Saga.Tests\BrewUp.Saga.Tests.csproj", "{014FE0D3-B7D9-4DD3-9548-F972E5DAD2D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewUp.Warehouses.Architecture.Tests", "Warehouses\BrewUp.Warehouses.Architecture.Tests\BrewUp.Warehouses.Architecture.Tests.csproj", "{4CF7C9C7-E62A-4415-894D-ED49627DAC4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,10 @@ Global
 		{014FE0D3-B7D9-4DD3-9548-F972E5DAD2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{014FE0D3-B7D9-4DD3-9548-F972E5DAD2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{014FE0D3-B7D9-4DD3-9548-F972E5DAD2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CF7C9C7-E62A-4415-894D-ED49627DAC4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CF7C9C7-E62A-4415-894D-ED49627DAC4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CF7C9C7-E62A-4415-894D-ED49627DAC4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CF7C9C7-E62A-4415-894D-ED49627DAC4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,6 +244,7 @@ Global
 		{C4F40022-B2D4-41C0-BD08-AA4E43120A7F} = {F64424AA-B47A-437A-92EB-588DD043C763}
 		{72E1252E-770D-4933-9C96-042FC668A9EC} = {FCDF302C-7352-4091-B657-A346B8D9E663}
 		{014FE0D3-B7D9-4DD3-9548-F972E5DAD2D4} = {72E1252E-770D-4933-9C96-042FC668A9EC}
+		{4CF7C9C7-E62A-4415-894D-ED49627DAC4D} = {6CDA58FC-29E7-4038-A8ED-07FC2FFBA172}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D64E812-8929-4A40-AA7D-CD28DB67CA9C}

@@ -1,16 +1,16 @@
-using NetArchTest.Rules;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using NetArchTest.Rules;
 
-namespace BrewUp.Sales.Architecture.Tests;
+namespace BrewUp.Warehouses.Architecture.Tests;
 
 [ExcludeFromCodeCoverage]
-public class SalesArchitectureTests
+public class WarehousesArchitectureTests
 {
     [Fact]
-    public void SalesProjects_Should_Having_Namespace_StartingWith_BrewUp_Sales()
+    public void WarehousesProjects_Should_Having_Namespace_StartingWith_BrewUp_Sales()
     {
-        var sourceModulePath = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().FullName, "Sales");
+        var sourceModulePath = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().FullName, "Warehouses");
         var subFolders = Directory.GetDirectories(sourceModulePath);
 
         var netVersion = Environment.Version;
@@ -27,24 +27,24 @@ public class SalesArchitectureTests
         var moduleTypes = Types.InAssemblies(moduleAssemblies);
         var moduleResult = moduleTypes
             .Should()
-            .ResideInNamespaceStartingWith("BrewUp.Sales")
+            .ResideInNamespaceStartingWith("BrewUp.Warehouses")
             .GetResult();
 
         Assert.True(moduleResult.IsSuccessful);
     }
-    
+
     [Fact]
-    public void Should_SalesArchitecture_BeCompliant()
+    public void Should_WarehousesArchitecture_BeCompliant()
     {
-        var types = Types.InAssembly(typeof(Facade.SalesFacade).Assembly);
+        var types = Types.InAssembly(typeof(Facade.WarehousesFacade).Assembly);
 
         var forbiddenAssemblies = new List<string>
         {
-            "BrewUp.Warehouses.Facade",
-            "BrewUp.Warehouses.Domain",
-            "BrewUp.Warehouses.Infrastructures",
-            "BrewUp.Warehouses.ReadModel",
-            "BrewUp.Warehouses.SharedKernel"
+            "BrewUp.Sales.Facade",
+            "BrewUp.Sales.Domain",
+            "BrewUp.Sales.Infrastructures",
+            "BrewUp.Sales.ReadModel",
+            "BrewUp.Sales.SharedKernel"
         };
 
         var result = types

@@ -23,4 +23,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BrewUp.Sales.Facade\BrewUp.Sales.Facade.csproj" />
+  </ItemGroup>
+
 </Project>
