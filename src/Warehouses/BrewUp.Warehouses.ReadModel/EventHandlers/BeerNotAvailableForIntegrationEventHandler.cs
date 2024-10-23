@@ -13,7 +13,7 @@ public sealed class BeerNotAvailableForIntegrationEventHandler(ILoggerFactory lo
     {
         var correlationId =
             new Guid(@event.UserProperties.FirstOrDefault(u => u.Key.Equals("CorrelationId")).Value.ToString()!);
-        BeerAvailabilityCommunicated integrationEvent = new(@event.BeerId, correlationId, new Quantity(-1, string.Empty));
+        BeerNotAvailableCommunicated integrationEvent = new(@event.BeerId, correlationId, new Quantity(-1, string.Empty));
         await eventBus.PublishAsync(integrationEvent, cancellationToken);
     }
 }

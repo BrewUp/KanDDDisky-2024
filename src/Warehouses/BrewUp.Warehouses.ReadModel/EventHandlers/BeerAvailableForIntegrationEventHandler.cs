@@ -5,14 +5,14 @@ using Muflone;
 
 namespace BrewUp.Warehouses.ReadModel.EventHandlers;
 
-public sealed class AvailabilityCheckedEventHandler(ILoggerFactory loggerFactory,
-    IEventBus eventBus) : DomainEventHandlerBase<AvailabilityChecked>(loggerFactory) 
+public sealed class BeerAvailableForIntegrationEventHandler(ILoggerFactory loggerFactory,
+    IEventBus eventBus) : DomainEventHandlerBase<BeerAvailable>(loggerFactory) 
 {
-    public override async Task HandleAsync(AvailabilityChecked @event, CancellationToken cancellationToken = default)
+    public override async Task HandleAsync(BeerAvailable @event, CancellationToken cancellationToken = default)
     {
         var correlationId =
             new Guid(@event.UserProperties.FirstOrDefault(u => u.Key.Equals("CorrelationId")).Value.ToString()!);
-        BeerAvailabilityCommunicated integrationEvent = new(@event.BeerId, correlationId, @event.Quantity);
+        BeerAvailableCommunicated integrationEvent = new(@event.BeerId, correlationId, @event.Quantity);
         await eventBus.PublishAsync(integrationEvent, cancellationToken);
     }
 }

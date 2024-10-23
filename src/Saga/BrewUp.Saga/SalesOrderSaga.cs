@@ -14,7 +14,8 @@ namespace BrewUp.Saga;
 
 public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, ILoggerFactory loggerFactory)
     : Saga<StartSalesOrderSaga, SalesOrderSaga.SalesOrderSagaState>(serviceBus, repository, loggerFactory),
-        ISagaEventHandlerAsync<BeerAvailabilityCommunicated>,
+        ISagaEventHandlerAsync<BeerAvailableCommunicated>,
+        ISagaEventHandlerAsync<BeerNotAvailableCommunicated>,
         ISagaEventHandlerAsync<SalesOrderCreatedCommunicated>,
         ISagaEventHandlerAsync<PaymentAccepted>,
         ISagaEventHandlerAsync<PaymentRejected>
@@ -39,6 +40,8 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         
         public bool PaymentAccepted { get; set; }
         public bool PaymentRejected { get; set; }
+        
+        public bool SagaFailed { get; set; }
     }
 
     public override async Task StartedByAsync(StartSalesOrderSaga command)
@@ -59,7 +62,9 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
             
             AvailabilityChecked = false,
             SalesOrderCreated = false,
-            SalesOrderProcessed = false
+            SalesOrderProcessed = false,
+            
+            SagaFailed = false
         };
         await Repository.SaveAsync(command.MessageId, SagaState);
 
@@ -70,7 +75,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         }
     }
 
-    public async Task HandleAsync(BeerAvailabilityCommunicated @event)
+    public async Task HandleAsync(BeerAvailableCommunicated @event)
     {
         // Read correlationId from the event
         var correlationId =
@@ -78,6 +83,10 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         
         // Restore and Update the saga state
         SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
+        
+        if (SagaState.AvailabilityChecked || SagaState.SagaFailed)
+            return;
+        
         SagaState.RowsChecked++;
         
         var row = SagaState.Availabilities.FirstOrDefault(a => a.BeerId.ToString() == @event.BeerId.Value);
@@ -92,9 +101,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
             });
         }
 
-        var beerAvailabilitiesArray = SagaState.Availabilities as BeerAvailabilities[] ?? SagaState.Availabilities.ToArray();
-        if (SagaState.RowsChecked == SagaState.Rows.Count() && 
-            beerAvailabilitiesArray.Sum(a => a.Quantity.Value) <= beerAvailabilitiesArray.Sum(a => a.Availability.Value))
+        if (SagaState.RowsChecked == SagaState.Rows.Count())
         {
             SagaState.AvailabilityChecked = true;
             CreateSalesOrder command = new(new SalesOrderId(new Guid(SagaState.SalesOrderId)), correlationId,
@@ -103,9 +110,26 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
                 SagaState.Rows);
             await ServiceBus.SendAsync(command, CancellationToken.None);
         }
-        // TODO: Handle the case when the availability is not enough
         
         await Repository.SaveAsync(correlationId, SagaState);
+    }
+    
+    public async Task HandleAsync(BeerNotAvailableCommunicated @event)
+    {
+        // Read correlationId from the event
+        var correlationId =
+            new Guid(@event.UserProperties.FirstOrDefault(u => u.Key.Equals("CorrelationId")).Value.ToString()!);
+        
+        // Restore and Update the saga state
+        SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
+        
+        if (SagaState.AvailabilityChecked || SagaState.SagaFailed)
+            return;
+        
+        SagaState.SagaFailed = true;
+        await Repository.SaveAsync(correlationId, SagaState);
+        
+        // Command to NotificationBoundedContext to notify the user
     }
 
     public async Task HandleAsync(SalesOrderCreatedCommunicated @event)
@@ -155,7 +179,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
     }
 
     #region Dispose
-    
+
     public void Dispose()
     {
         loggerFactory.Dispose();

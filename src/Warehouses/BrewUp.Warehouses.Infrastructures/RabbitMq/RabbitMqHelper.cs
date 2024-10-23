@@ -50,7 +50,7 @@ public static class RabbitMqHelper
 			new AskForAvailabilityConsumer(repository,
 				connectionFactory,
 				loggerFactory),
-			new AvailabilityCheckedConsumer(serviceProvider.GetRequiredService<IEventBus>(),
+			new BeerAvailableConsumer(serviceProvider.GetRequiredService<IEventBus>(),
 				connectionFactory,
 				loggerFactory),
 			new BeerNotAvailableConsumer(serviceProvider.GetRequiredService<IEventBus>(),

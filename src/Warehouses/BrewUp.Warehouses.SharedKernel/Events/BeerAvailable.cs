@@ -4,7 +4,7 @@ using Muflone.Messages.Events;
 
 namespace BrewUp.Warehouses.SharedKernel.Events;
 
-public sealed class AvailabilityChecked(BeerId aggregateId, Guid commitId, Quantity quantity)
+public sealed class BeerAvailable(BeerId aggregateId, Guid commitId, Quantity quantity)
     : DomainEvent(aggregateId, commitId)
 {
     public readonly BeerId BeerId = aggregateId;

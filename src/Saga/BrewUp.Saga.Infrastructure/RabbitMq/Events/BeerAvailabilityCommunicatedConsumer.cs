@@ -13,8 +13,8 @@ public sealed class BeerAvailabilityCommunicatedConsumer(
     ILoggerFactory loggerFactory,
     IServiceBus serviceBus,
     ISagaRepository sagaRepository)
-    : SagaEventConsumerBase<BeerAvailabilityCommunicated>(mufloneConnectionFactory, loggerFactory)
+    : SagaEventConsumerBase<BeerAvailableCommunicated>(mufloneConnectionFactory, loggerFactory)
 {
-    protected override ISagaEventHandlerAsync<BeerAvailabilityCommunicated> HandlerAsync { get; } =
+    protected override ISagaEventHandlerAsync<BeerAvailableCommunicated> HandlerAsync { get; } =
         new SalesOrderSaga(serviceBus, sagaRepository, loggerFactory);
 }

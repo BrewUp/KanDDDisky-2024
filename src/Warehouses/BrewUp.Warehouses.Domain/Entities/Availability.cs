@@ -57,12 +57,12 @@ public class Availability : AggregateRoot
 		// Check if there is enough availability and raise a different event if not
 		var availability = _quantity with {Value = _quantity.Value - _committedForSale.Value - quantity.Value};
 		if (availability.Value >= 0)
-			RaiseEvent(new AvailabilityChecked(_beerId, correlationId, availability));
+			RaiseEvent(new BeerAvailable(_beerId, correlationId, availability));
 		else
 			RaiseEvent(new BeerNotAvailable(_beerId, correlationId));
 	}
 	
-	private void Apply(AvailabilityChecked @event)
+	private void Apply(BeerAvailable @event)
 	{
 		_committedForSale = _committedForSale with {Value = _committedForSale.Value + @event.Quantity.Value};
 	}

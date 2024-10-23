@@ -8,13 +8,13 @@ using Muflone.Transport.RabbitMQ.Consumers;
 
 namespace BrewUp.Warehouses.Infrastructures.RabbitMq.Events;
 
-public sealed class AvailabilityCheckedConsumer(IEventBus eventBus,
+public sealed class BeerAvailableConsumer(IEventBus eventBus,
     IRabbitMQConnectionFactory connectionFactory, ILoggerFactory loggerFactory)
-    : DomainEventsConsumerBase<AvailabilityChecked>(connectionFactory, loggerFactory)
+    : DomainEventsConsumerBase<BeerAvailable>(connectionFactory, loggerFactory)
 {
-    protected override IEnumerable<IDomainEventHandlerAsync<AvailabilityChecked>> HandlersAsync { get; } =
-        new List<IDomainEventHandlerAsync<AvailabilityChecked>>
+    protected override IEnumerable<IDomainEventHandlerAsync<BeerAvailable>> HandlersAsync { get; } =
+        new List<IDomainEventHandlerAsync<BeerAvailable>>
         {
-            new AvailabilityCheckedEventHandler(loggerFactory, eventBus)
+            new BeerAvailableForIntegrationEventHandler(loggerFactory, eventBus)
         };
 }

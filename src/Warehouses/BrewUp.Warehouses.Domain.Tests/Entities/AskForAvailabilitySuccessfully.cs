@@ -38,6 +38,6 @@ public sealed class AskForAvailabilitySuccessfully : CommandSpecification<AskFor
 
     protected override IEnumerable<DomainEvent> Expect()
     {
-        yield return new AvailabilityChecked(_beerId, _correlationId, _availability);
+        yield return new BeerAvailable(_beerId, _correlationId, _availability);
     }
 }

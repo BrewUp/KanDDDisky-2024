@@ -24,7 +24,7 @@ public sealed class RestoreCommittedForSaleSuccessfully : CommandSpecification<R
     protected override IEnumerable<DomainEvent> Given()
     {
         yield return new BeerAvailabilityCreated(_beerId, _correlationId, _beerName, _quantity);
-        yield return new AvailabilityChecked(_beerId, _correlationId, _availability);
+        yield return new BeerAvailable(_beerId, _correlationId, _availability);
     }
 
     protected override RestoreCommittedForSale When()
