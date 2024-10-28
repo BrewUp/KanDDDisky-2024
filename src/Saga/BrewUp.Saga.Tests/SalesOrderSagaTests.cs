@@ -13,19 +13,17 @@ namespace BrewUp.Saga.Tests
 {
 	public class SalesOrderSagaTests
 	{
-		private SalesOrderSaga _saga;
 		private InProcessServiceBus _serviceBus;
 		private InMemorySagaRepository _inMemorySagaRepository = new(new Serializer());
 
 		public SalesOrderSagaTests()
 		{
-			_saga = new SalesOrderSaga(_serviceBus, _inMemorySagaRepository, new NullLoggerFactory());
 			_serviceBus = new InProcessServiceBus(typeof(StartSalesOrderSaga),
 				new Dictionary<Type, Event>()
 				{
 					{ typeof(AskForBeerAvailability), new BeerAvailableCommunicated(_beerId, _correlationId, new Quantity(10, "Liters")) },
 					{ typeof(CreateSalesOrder), new SalesOrderCreatedCommunicated(new SalesOrderId(Guid.NewGuid()), _correlationId, new SalesOrderNumber("123"), new OrderDate(DateTime.Today), _customerId,
-							new CustomerName("abc"), new List<SalesOrderRowJson>() { new()
+							new CustomerName("abc"), new List<SalesOrderRowJson> { new()
 							{
 								BeerId = new Guid(_beerId.Value),
 								BeerName = "Muflone IPA",
@@ -38,8 +36,8 @@ namespace BrewUp.Saga.Tests
 				});
 		}
 
-		private readonly BeerId _beerId = new BeerId(Guid.NewGuid());
-		private readonly CustomerId _customerId = new CustomerId(Guid.NewGuid());
+		private readonly BeerId _beerId = new (Guid.NewGuid());
+		private readonly CustomerId _customerId = new (Guid.NewGuid());
 
 		private readonly Guid _correlationId = Guid.NewGuid();
 
@@ -47,7 +45,7 @@ namespace BrewUp.Saga.Tests
 		public async Task Saga_StartsWithCommand()
 		{
 			var command = new StartSalesOrderSaga(new SalesOrderId(Guid.NewGuid()), _correlationId, new SalesOrderNumber("123"), new OrderDate(DateTime.Today), _customerId,
-				new CustomerName("abc"), new List<SalesOrderRowJson>() { new()
+				new CustomerName("abc"), new List<SalesOrderRowJson> { new()
 				{
 					BeerId = new Guid(_beerId.Value),
 					BeerName = "Muflone IPA",
