@@ -157,7 +157,7 @@ public class SalesOrderSaga(IServiceBus serviceBus, ISagaRepository repository, 
         // Restore and Update the saga state
         SagaState = await Repository.GetByIdAsync<SalesOrderSagaState>(correlationId);
         SagaState.PaymentAccepted = true;
-        await Repository.SaveAsync(correlationId, SagaState);
+        await Repository.CompleteAsync(correlationId);
     }
 
     public async Task HandleAsync(PaymentRejected @event)
