@@ -46,7 +46,7 @@ public class SalesOrderSagaTest
     [Fact]
     public void RunSagaSuccessfully()
     {
-        StartSalesOrderSaga startSalesOrderSaga = new StartSalesOrderSaga(
+        StartSalesOrderSaga startSalesOrderSaga = new (
             _salesOrderId,
             _correlationId,
             _salesOrderNumber,
@@ -55,7 +55,7 @@ public class SalesOrderSagaTest
             _customerName,
             new List<SalesOrderRowJson>
             {
-                new SalesOrderRowJson
+                new ()
                 {
                     BeerId = new Guid(_beerId.Value),
                     BeerName = _beerName.Value,

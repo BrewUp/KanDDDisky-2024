@@ -2,7 +2,7 @@
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
 
-namespace TestProject1BrewUp.Payments.Domain.Tests.InMemory
+namespace BrewUp.Payments.Domain.Tests.InMemory
 {
 	/// <summary>
 	///   https://github.com/luizdamim/NEventStoreExample/tree/master/NEventStoreExample.Test

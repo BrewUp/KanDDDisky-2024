@@ -1,4 +1,5 @@
 ﻿using BrewUp.Payments.Domain.CommandHandlers;
+using BrewUp.Payments.Domain.Tests.InMemory;
 using BrewUp.Payments.SharedKernel.Commands;
 using BrewUp.Payments.SharedKernel.Events;
 using BrewUp.Shared.CustomTypes;
@@ -6,9 +7,8 @@ using BrewUp.Shared.DomainIds;
 using Microsoft.Extensions.Logging.Abstractions;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
-using TestProject1BrewUp.Payments.Domain.Tests.InMemory;
 
-namespace TestProject1BrewUp.Payments.Domain.Tests.Entities;
+namespace BrewUp.Payments.Domain.Tests.Entities;
 
 public sealed class CreateSavingsAccountSuccessfully : CommandSpecification<CreateSavingsAccount>
 {

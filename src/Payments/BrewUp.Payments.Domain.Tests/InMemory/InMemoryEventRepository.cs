@@ -3,7 +3,7 @@ using Muflone.Core;
 using Muflone.Messages.Events;
 using Muflone.Persistence;
 
-namespace TestProject1BrewUp.Payments.Domain.Tests.InMemory
+namespace BrewUp.Payments.Domain.Tests.InMemory
 {
 	public sealed class InMemoryEventRepository : IRepository
 	{
